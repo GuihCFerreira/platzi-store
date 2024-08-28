@@ -5,6 +5,8 @@ import { ScrollArea } from "./ui/scroll-area";
 import { Separator } from "./ui/separator";
 
 const Cart = () => {
+  //const { products, subtotal, total, totalDiscount } = useContext(CartContext);
+
   return (
     <div className="flex h-full flex-col gap-5">
       <Badge
