@@ -43,6 +43,15 @@ login com o GitHub e selecionar o repositório que deseja hospedar.
 O projeto se encontra no seguinte link
 [https://platzi-store-ten.vercel.app/](https://platzi-store-ten.vercel.app/)
 
+## Imagens do projeto 
+
+<img src="assets/img-1.png">
+<img src="assets/img-2.png">
+<img src="assets/img-3.png">
+<img src="assets/img-4.png">
+<img src="assets/img-5.png">
+<img src="assets/img-6.png">
+
 ## Licença
 
 Projeto desenvolvido por mim Guilhermem, a qual detenho os direitos do mesmo.
