@@ -17,7 +17,7 @@ export async function getProductById(id: number): Promise<Product> {
 
 export async function getProductsByCategory(id: number): Promise<Product[]> {
   const data: Product[] = await myfetch.get(
-    `products?categoryId=${id}&offset=0&limit=10`
+    `products?categoryId=${id}&offset=0&limit=5`
   );
   return data;
 }

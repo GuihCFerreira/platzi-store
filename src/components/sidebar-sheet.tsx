@@ -1,11 +1,6 @@
 import { CATEGORY_ICON } from "@/_constants/category-icon";
 import { getCategories } from "@/_data/get-categories";
-import {
-  HomeIcon,
-  LayoutDashboard,
-  ListOrderedIcon,
-  ShoppingCartIcon,
-} from "lucide-react";
+import { HomeIcon, LayoutDashboard, ListOrderedIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
@@ -14,7 +9,7 @@ const SidebarSheet = async () => {
   const categories = await getCategories();
 
   return (
-    <SheetContent>
+    <SheetContent side={"left"}>
       <SheetHeader>
         <SheetTitle className="text-left">Menu</SheetTitle>
       </SheetHeader>
@@ -68,14 +63,20 @@ const SidebarSheet = async () => {
         </SheetClose>
       </div>
 
-      <div className="flex flex-col gap-2 py-3 border-b border-solid">
-        <Button className="justify-start gap-2" variant="ghost" asChild>
-          <Link href={"/dashboard"}>
-            <ShoppingCartIcon size={18} />
-            Carrinho
-          </Link>
-        </Button>
-      </div>
+      {/* <div className="flex flex-col gap-2 py-3 border-b border-solid">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button className="justify-start gap-2" variant="ghost">
+              <ShoppingCartIcon size={18} />
+              Carrinho
+            </Button>
+          </SheetTrigger>
+
+          <SheetContent>
+            <Cart />
+          </SheetContent>
+        </Sheet>
+      </div> */}
 
       <div className="flex flex-col gap-2 py-3 border-b border-solid">
         {/* {quickSearchOptions.map((option) => (
