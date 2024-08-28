@@ -58,12 +58,14 @@ const SidebarSheet = async () => {
           </Button>
         </SheetClose>
 
-        <Button className="justify-start gap-2" variant="ghost" asChild>
-          <Link href={"/catalog"}>
-            <ListOrderedIcon size={18} />
-            Catálogo
-          </Link>
-        </Button>
+        <SheetClose asChild>
+          <Button className="justify-start gap-2" variant="ghost" asChild>
+            <Link href={"/catalog"}>
+              <ListOrderedIcon size={18} />
+              Catálogo
+            </Link>
+          </Button>
+        </SheetClose>
       </div>
 
       <div className="flex flex-col gap-2 py-3 border-b border-solid">
