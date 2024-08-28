@@ -1,5 +1,4 @@
 import { getProductById } from "@/_data/get-products";
-import Header from "@/components/header";
 import ProductItem from "@/components/product-item";
 
 export default async function Home() {
@@ -7,7 +6,6 @@ export default async function Home() {
 
   return (
     <div>
-      <Header />
       <ProductItem product={products} />
     </div>
   );

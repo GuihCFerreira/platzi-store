@@ -10,7 +10,12 @@ interface CategoryResponse {
   categories: Category[];
 }
 
-export async function getCategories(): Promise<CategoryResponse> {
-  const data: CategoryResponse = await myfetch.get("categories");
+export async function getCategories(): Promise<Category[]> {
+  const data: Category[] = await myfetch.get("categories");
+  return data;
+}
+
+export async function getCategoryById(id: number): Promise<Category> {
+  const data: Category = await myfetch.get(`categories/${id}`);
   return data;
 }
