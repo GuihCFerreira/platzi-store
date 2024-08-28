@@ -11,7 +11,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
     .replace(/"(https[^"]+)"/g, "$1");
 
   return (
-    <Link href={`/product`}>
+    <Link href={`/product/${product.id}`}>
       <div className="flex flex-col gap-4 ">
         <div className="relative flex h-[170px] w-full items-center justify-center rounded-lg bg-accent">
           <Image
