@@ -5,8 +5,8 @@ interface ProductsResponse {
   products: Product[];
 }
 
-export async function getProducts(): Promise<ProductsResponse> {
-  const data: ProductsResponse = await myfetch.get("products?offset=0&limit=5");
+export async function getProducts(): Promise<Product[]> {
+  const data: Product[] = await myfetch.get("products?offset=0&limit=5");
   return data;
 }
 
