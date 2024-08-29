@@ -1,5 +1,6 @@
 "use client";
 
+import { Category } from "@/_model/category";
 import { Product } from "@/_model/product";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,9 +12,10 @@ import ProductFormDialog from "./product-form-dialog";
 
 interface ProductItemProps {
   product: Product;
+  categories: Category[];
 }
 
-const ProductItem = ({ product }: ProductItemProps) => {
+const ProductItem = ({ product, categories }: ProductItemProps) => {
   const [isUpdateDialog, setIsUpdateDialog] = useState(false);
 
   return (
@@ -54,7 +56,10 @@ const ProductItem = ({ product }: ProductItemProps) => {
                 </DialogTrigger>
                 <DialogContent className="w-[90%]">
                   {isUpdateDialog ? (
-                    <ProductFormDialog product={product} />
+                    <ProductFormDialog
+                      product={product}
+                      categories={categories}
+                    />
                   ) : (
                     <DeleteProductDialog product={product} />
                   )}

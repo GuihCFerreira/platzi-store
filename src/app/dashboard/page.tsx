@@ -1,3 +1,4 @@
+import { getCategories } from "@/_data/get-categories";
 import { getProducts } from "@/_data/get-products";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -6,6 +7,7 @@ import ProductItem from "./components/product-item";
 
 const DashboardPage = async () => {
   const products = await getProducts();
+  const categories = await getCategories();
 
   return (
     <div className="p-3">
@@ -16,7 +18,7 @@ const DashboardPage = async () => {
             <Button className="mx-3 my-1">Adicionar</Button>
           </DialogTrigger>
           <DialogContent className="w-[90%]">
-            <ProductFormDialog product={null} />
+            <ProductFormDialog product={null} categories={categories} />
           </DialogContent>
         </Dialog>
       </div>
@@ -24,7 +26,11 @@ const DashboardPage = async () => {
         {products.length > 0 ? (
           <>
             {products.map((product) => (
-              <ProductItem key={product.id} product={product} />
+              <ProductItem
+                key={product.id}
+                product={product}
+                categories={categories}
+              />
             ))}
           </>
         ) : (

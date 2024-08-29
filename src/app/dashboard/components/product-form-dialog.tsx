@@ -1,5 +1,6 @@
 "use client";
 
+import { Category } from "@/_model/category";
 import { Product } from "@/_model/product";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,13 +18,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-interface DeleteProductDialogProps {
+interface ProductFormDialogProps {
   product: Product | null;
+  categories: Category[];
 }
 
 const formSchema = z.object({
@@ -36,7 +45,7 @@ const formSchema = z.object({
   price: z.number().positive().gte(0, {
     message: "O preço deve ser maior que 0",
   }),
-  categoryId: z.number().positive().int({
+  categoryId: z.number().positive().gte(0, {
     message: "Selecione o número da categoria",
   }),
   images: z.string().min(10, {
@@ -44,7 +53,7 @@ const formSchema = z.object({
   }),
 });
 
-const ProductFormDialog = ({ product }: DeleteProductDialogProps) => {
+const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
   const handleSendProduct = async () => {
     try {
       toast.success("Produto excluído com sucesso!");
@@ -76,7 +85,6 @@ const ProductFormDialog = ({ product }: DeleteProductDialogProps) => {
     <>
       <DialogHeader>
         <DialogTitle>
-          {" "}
           {product ? "Atualizar dados do" : "Adicionar novo"} produto
         </DialogTitle>
         <DialogDescription>
@@ -155,16 +163,34 @@ const ProductFormDialog = ({ product }: DeleteProductDialogProps) => {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center gap-3 justify-between">
-                  <FormLabel>ID Categoria</FormLabel>
-                  <FormControl>
-                    <Input
+                  <FormLabel>Categoria</FormLabel>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      {/* <Input
                       className="max-w-[75%]"
                       placeholder={product ? product.category.id.toString : "0"}
                       {...field}
                       type="number"
                       value={product?.category.id}
-                    />
-                  </FormControl>
+                    /> */}
+                      <SelectTrigger className="max-w-[75%]">
+                        <SelectValue
+                          placeholder={
+                            product
+                              ? product.category.name
+                              : "Selecione uma categoria"
+                          }
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem value={category.name} key={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <FormMessage />
               </FormItem>
