@@ -1,9 +1,11 @@
 "use client";
 
+import { createProduct, CreateProductProps } from "@/_actions/create-product";
 import { Category } from "@/_model/category";
 import { Product } from "@/_model/product";
 import { Button } from "@/components/ui/button";
 import {
+  DialogClose,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -42,11 +44,11 @@ const formSchema = z.object({
   description: z.string().min(20, {
     message: "A descrição deve conter pelo menos 20 letras.",
   }),
-  price: z.number().positive().gte(0, {
+  price: z.string().min(1, {
     message: "O preço deve ser maior que 0",
   }),
-  categoryId: z.number().positive().gte(0, {
-    message: "Selecione o número da categoria",
+  categoryId: z.string().min(1, {
+    message: "Selecione uma categoria",
   }),
   images: z.string().min(10, {
     message: "Digite pelo menos uma URL de imagem",
@@ -54,23 +56,24 @@ const formSchema = z.object({
 });
 
 const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
-  const handleSendProduct = async () => {
+  const handleSendProduct = async (product: CreateProductProps) => {
     try {
-      toast.success("Produto excluído com sucesso!");
+      await createProduct(product);
+      toast.success("Produto criado com sucesso!");
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao excluir produto. Tente novamente.");
+      toast.error("Erro ao inserir produto. Tente novamente.");
     }
   };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      categoryId: 0,
-      price: 0,
-      images: "",
+      title: product ? product?.title : "",
+      description: product ? product?.description : "",
+      price: product ? product?.price.toString() : "0",
+      categoryId: product ? product?.category.id.toString() : "0",
+      images: product ? product?.images[0] : "",
     },
   });
 
@@ -79,6 +82,18 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+
+    const newProduct: CreateProductProps = {
+      product: {
+        title: values.title,
+        description: values.description,
+        price: Number(values.price),
+        categoryId: Number(values.categoryId),
+        images: [values.images],
+      },
+    };
+
+    handleSendProduct(newProduct);
   }
 
   return (
@@ -106,7 +121,6 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
                       className="max-w-[75%]"
                       placeholder={product ? product.title : "Título"}
                       {...field}
-                      value={product?.title}
                     />
                   </FormControl>
                 </div>
@@ -127,7 +141,6 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
                       className="max-w-[75%]"
                       placeholder={product ? product.description : "Descrição"}
                       {...field}
-                      value={product?.description}
                     />
                   </FormControl>
                 </div>
@@ -148,7 +161,6 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
                       className="max-w-[75%]"
                       placeholder={product ? product.price.toFixed(2) : "Preço"}
                       {...field}
-                      value={product?.price.toFixed(2)}
                     />
                   </FormControl>
                 </div>
@@ -185,7 +197,10 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
                     </FormControl>
                     <SelectContent>
                       {categories.map((category) => (
-                        <SelectItem value={category.name} key={category.id}>
+                        <SelectItem
+                          value={category.id.toString()}
+                          key={category.id}
+                        >
                           {category.name}
                         </SelectItem>
                       ))}
@@ -209,7 +224,6 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
                       className="max-w-[75%]"
                       placeholder={product ? product.images[0] : "Imagens"}
                       {...field}
-                      value={product?.images[0]}
                     />
                   </FormControl>
                 </div>
@@ -219,9 +233,11 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
           />
 
           <DialogFooter className="flex flex-row gap-3">
-            <Button variant={"default"} className="w-full" type="submit">
-              {product ? "Atualizar o produto" : "Adicionar produto"}
-            </Button>
+            <DialogClose asChild>
+              <Button variant={"default"} className="w-full" type="submit">
+                {product ? "Atualizar o produto" : "Adicionar produto"}
+              </Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </Form>

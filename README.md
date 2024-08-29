@@ -9,6 +9,7 @@ Para exibição dos produtos, foi consumido a [Platzi Api](https://fakeapi.platz
 
 ## TODO
 
+- [ ] Criar e alterar produtos
 - [ ] Lógica produtos no carrinho
 - [ ] Páginação de dados da API
 - [ ] Layout responsivo
