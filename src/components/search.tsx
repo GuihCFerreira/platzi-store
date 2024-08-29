@@ -26,7 +26,7 @@ const Search = () => {
   });
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    router.push(`/product?title=${data.title}`);
+    router.push(`/products?title=${data.title}`);
   };
 
   return (
