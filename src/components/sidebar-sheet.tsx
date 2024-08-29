@@ -41,7 +41,7 @@ const SidebarSheet = async () => {
 
       <ScrollArea className="h-75 w-full border-b border-solid">
         <div className="flex flex-col gap-2 py-3">
-          {categories.map((option) => (
+          {categories.slice(0, 6).map((option) => (
             <SheetClose key={option.name} asChild>
               <Button className="justify-start gap-2" variant="ghost" asChild>
                 <Link href={`/category/${option.id}`}>

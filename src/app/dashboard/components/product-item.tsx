@@ -30,7 +30,7 @@ const ProductItem = ({ product, categories }: ProductItemProps) => {
             className="rounded-sm"
           />
           <div className="ml-3 flex  flex-1 flex-col items-center">
-            <p className="truncate text-sm">{product.title}</p>
+            <p className="truncate text-sm">{product.title + product.id}</p>
             <p className=" text-sm">R$ {product.price.toFixed(2)}</p>
 
             <div className="flex gap-2 mt-1">

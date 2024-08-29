@@ -15,6 +15,7 @@ interface DeleteProductDialogProps {
 }
 
 const DeleteProductDialog = ({ product }: DeleteProductDialogProps) => {
+  console.log("id" + product.id);
   const handleDeleteProduct = async () => {
     try {
       await deleteProduct(product.id);
@@ -28,7 +29,7 @@ const DeleteProductDialog = ({ product }: DeleteProductDialogProps) => {
   return (
     <>
       <DialogHeader>
-        <DialogTitle> Você quer excluir o produto?</DialogTitle>
+        <DialogTitle> Você quer excluir o produto? {product.id}</DialogTitle>
         <DialogDescription>
           Tem certeza que deseja realizar a exclusão do produto {product.title}?
           Essa ação é irreversível.
