@@ -5,11 +5,11 @@ import { revalidatePath } from "next/cache";
 
 export interface CreateProductProps {
   product: {
-    title: string;
-    description: string;
-    price: number;
-    categoryId: number;
-    images: string[];
+    title: string | null;
+    description: string | null;
+    price: number | null;
+    categoryId: number | null;
+    images: string[] | null;
   };
 }
 

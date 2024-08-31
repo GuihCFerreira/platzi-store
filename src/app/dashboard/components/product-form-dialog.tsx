@@ -1,6 +1,7 @@
 "use client";
 
 import { createProduct, CreateProductProps } from "@/_actions/create-product";
+import { updateProduct, UpdateProductProps } from "@/_actions/update-product";
 import { Category } from "@/_model/category";
 import { Product } from "@/_model/product";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -36,6 +38,14 @@ interface ProductFormDialogProps {
   product: Product | null;
   categories: Category[];
 }
+
+type UserFormChange = {
+  title: boolean;
+  description: boolean;
+  price: boolean;
+  categoryId: boolean;
+  images: boolean;
+};
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -56,7 +66,7 @@ const formSchema = z.object({
 });
 
 const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
-  const handleSendProduct = async (product: CreateProductProps) => {
+  const handleCreateProduct = async (product: CreateProductProps) => {
     try {
       await createProduct(product);
       toast.success("Produto criado com sucesso!");
@@ -65,6 +75,24 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
       toast.error("Erro ao inserir produto. Tente novamente.");
     }
   };
+
+  const handleUpdateProduct = async (product: UpdateProductProps) => {
+    try {
+      await updateProduct(product);
+      toast.success("Produto alterado com sucesso!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao alterar produto. Tente novamente.");
+    }
+  };
+
+  const [formChanges, setFormChanges] = useState<UserFormChange>({
+    title: false,
+    price: false,
+    description: false,
+    categoryId: false,
+    images: false,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,21 +107,37 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
+    console.log(formChanges);
 
-    const newProduct: CreateProductProps = {
-      product: {
-        title: values.title,
-        description: values.description,
-        price: Number(values.price),
-        categoryId: Number(values.categoryId),
-        images: [values.images],
-      },
-    };
+    if (product) {
+      const updateProduct: UpdateProductProps = {
+        productId: product?.id,
+        product: {
+          ...(formChanges.title && { title: values.title }),
+          ...(formChanges.description && { description: values.description }),
+          ...(formChanges.price && { price: Number(values.price) }),
+          ...(formChanges.categoryId && {
+            categoryId: Number(values.categoryId),
+          }),
+          ...(formChanges.images && { images: [values.images] }),
+        },
+      };
 
-    handleSendProduct(newProduct);
+      handleUpdateProduct(updateProduct);
+    } else {
+      const newProduct: CreateProductProps = {
+        product: {
+          title: values.title,
+          description: values.description,
+          price: Number(values.price),
+          categoryId: Number(values.categoryId),
+          images: [values.images],
+        },
+      };
+
+      handleCreateProduct(newProduct);
+    }
   }
 
   return (
@@ -121,6 +165,9 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
                       className="max-w-[75%]"
                       placeholder={product ? product.title : "Título"}
                       {...field}
+                      onInput={() => {
+                        setFormChanges({ ...formChanges, title: true });
+                      }}
                     />
                   </FormControl>
                 </div>
@@ -141,6 +188,9 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
                       className="max-w-[75%]"
                       placeholder={product ? product.description : "Descrição"}
                       {...field}
+                      onInput={() => {
+                        setFormChanges({ ...formChanges, description: true });
+                      }}
                     />
                   </FormControl>
                 </div>
@@ -161,6 +211,9 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
                       className="max-w-[75%]"
                       placeholder={product ? product.price.toFixed(2) : "Preço"}
                       {...field}
+                      onInput={() => {
+                        setFormChanges({ ...formChanges, price: true });
+                      }}
                     />
                   </FormControl>
                 </div>
@@ -176,7 +229,12 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
               <FormItem>
                 <div className="flex items-center gap-3 justify-between">
                   <FormLabel>Categoria</FormLabel>
-                  <Select onValueChange={field.onChange}>
+                  <Select
+                    onValueChange={() => (
+                      field.onChange,
+                      setFormChanges({ ...formChanges, categoryId: true })
+                    )}
+                  >
                     <FormControl>
                       {/* <Input
                       className="max-w-[75%]"
@@ -224,6 +282,9 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
                       className="max-w-[75%]"
                       placeholder={product ? product.images[0] : "Imagens"}
                       {...field}
+                      onInput={() => {
+                        setFormChanges({ ...formChanges, images: true });
+                      }}
                     />
                   </FormControl>
                 </div>
