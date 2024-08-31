@@ -22,7 +22,7 @@ const DashboardPage = async () => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="p-1 flex gap-2 flex-col">
+      <div className="p-1 flex gap-2 flex-col my-2">
         {products.length > 0 ? (
           <>
             {products.map((product) => (

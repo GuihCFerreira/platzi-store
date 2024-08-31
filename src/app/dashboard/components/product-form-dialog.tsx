@@ -100,15 +100,18 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
       title: product ? product?.title : "",
       description: product ? product?.description : "",
       price: product ? product?.price.toString() : "0",
-      categoryId: product ? product?.category.id.toString() : "0",
+      categoryId: product ? product?.category.id.toString() : "",
       images: product ? product?.images[0] : "",
     },
   });
 
+  const { register, handleSubmit, setValue, watch } = form;
+  const selectedCategoryId = watch("categoryId");
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    console.log(formChanges);
+    console.log(selectedCategoryId);
 
     if (product) {
       const updateProduct: UpdateProductProps = {
@@ -135,6 +138,8 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
           images: [values.images],
         },
       };
+      console.log(newProduct);
+      console.log("Categories" + categories);
 
       handleCreateProduct(newProduct);
     }
@@ -230,19 +235,14 @@ const ProductFormDialog = ({ product, categories }: ProductFormDialogProps) => {
                 <div className="flex items-center gap-3 justify-between">
                   <FormLabel>Categoria</FormLabel>
                   <Select
-                    onValueChange={() => (
+                    onValueChange={(value) => (
                       field.onChange,
+                      setValue("categoryId", value),
                       setFormChanges({ ...formChanges, categoryId: true })
                     )}
+                    value={watch("categoryId")}
                   >
                     <FormControl>
-                      {/* <Input
-                      className="max-w-[75%]"
-                      placeholder={product ? product.category.id.toString : "0"}
-                      {...field}
-                      type="number"
-                      value={product?.category.id}
-                    /> */}
                       <SelectTrigger className="max-w-[75%]">
                         <SelectValue
                           placeholder={
