@@ -1,6 +1,6 @@
-import myfetch from "@/_lib/myfetch";
 import { Category } from "@/_model/category";
 import { Product } from "@/_model/product";
+import axios from "axios";
 
 interface CategoryProductsResponse {
   products: Product[];
@@ -11,11 +11,13 @@ interface CategoryResponse {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const data: Category[] = await myfetch.get("categories");
-  return data;
+  const data = await axios.get(process.env.BASE_URL + `categories`);
+  const categories: Category[] = data.data;
+  return categories;
 }
 
 export async function getCategoryById(id: number): Promise<Category> {
-  const data: Category = await myfetch.get(`categories/${id}`);
-  return data;
+  const data = await axios.get(process.env.BASE_URL + `categories/${id}`);
+  const category: Category = data.data;
+  return category;
 }
