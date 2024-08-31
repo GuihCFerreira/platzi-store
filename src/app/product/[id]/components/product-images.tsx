@@ -19,7 +19,9 @@ const ProductImage = ({ name, imageUrls }: ProductImageProps) => {
       <div className=" flex bg-accent h-[380px] items-center w-full justify-center relative">
         <Image
           alt={name}
-          src={currentImage}
+          src={currentImage
+            .replace(/^\[|\]$/g, "") // Remove colchetes no início e no final
+            .replace(/"(https[^"]+)"/g, "$1")}
           width={0}
           height={0}
           sizes="100vw"
@@ -42,7 +44,9 @@ const ProductImage = ({ name, imageUrls }: ProductImageProps) => {
           >
             <div className="relative w-full h-full">
               <Image
-                src={imageUrl}
+                src={imageUrl
+                  .replace(/^\[|\]$/g, "") // Remove colchetes no início e no final
+                  .replace(/"(https[^"]+)"/g, "$1")}
                 alt={name}
                 fill
                 className="object-cover rounded-lg"
