@@ -12,7 +12,7 @@ interface ProductDetailsPageProps {
 
 const ProductPage = async ({ params }: ProductDetailsPageProps) => {
   const product = await getProductById(params.id);
-  const relatedProducts = await getProductsByCategory(product.category.id);
+  const relatedProducts = await getProductsByCategory(product.category.id, 0);
 
   return (
     <div className="flex flex-col gap-8 pb-8">

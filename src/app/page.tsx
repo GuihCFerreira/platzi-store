@@ -10,8 +10,8 @@ import Link from "next/link";
 
 export default async function Home() {
   const productsOffer = await getProductForSale();
-  const shoes = await getProductsByCategory(4);
-  const electronics = await getProductsByCategory(2);
+  const shoes = await getProductsByCategory(4, 0);
+  const electronics = await getProductsByCategory(2, 0);
   const categories = await getCategories();
 
   return (

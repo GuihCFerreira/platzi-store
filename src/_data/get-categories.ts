@@ -11,13 +11,16 @@ interface CategoryResponse {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const data = await axios.get(process.env.BASE_URL + `categories`);
+  const data = await axios.get(process.env.NEXT_PUBLIC_BASE_URL + `categories`);
   const categories: Category[] = data.data;
   return categories;
 }
 
 export async function getCategoryById(id: number): Promise<Category> {
-  const data = await axios.get(process.env.BASE_URL + `categories/${id}`);
+  const data = await axios.get(
+    process.env.NEXT_PUBLIC_BASE_URL + `categories/${id}`
+  );
+
   const category: Category = data.data;
   return category;
 }
