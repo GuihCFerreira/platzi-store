@@ -5,9 +5,9 @@ interface ProductsResponse {
   products: Product[];
 }
 
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(offset: number): Promise<Product[]> {
   const data = await axios.get(
-    process.env.NEXT_PUBLIC_BASE_URL + `products?offset=0&limit=6`
+    process.env.NEXT_PUBLIC_BASE_URL + `products?offset=${offset}&limit=6`
   );
   const products: Product[] = data.data;
   return products;
@@ -22,10 +22,13 @@ export async function getProductForSale(): Promise<Product[]> {
   return products;
 }
 
-export async function getProductByTitle(title: string): Promise<Product[]> {
+export async function getProductByTitle(
+  title: string,
+  offset: number
+): Promise<Product[]> {
   const data = await axios.get(
     process.env.NEXT_PUBLIC_BASE_URL +
-      `products?offset=0&limit=10&title=${title}`
+      `products?offset=${offset}&limit=6&title=${title}`
   );
 
   const products: Product[] = data.data;

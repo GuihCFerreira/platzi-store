@@ -34,11 +34,6 @@ const CategoryPage = ({ params }: CategoryProductsProps) => {
     };
 
     fetch();
-    console.log(products.length);
-
-    console.log(process.env.BASE_URL);
-
-    console.log("Mudou offset" + offset);
   }, [offset]);
 
   return (
@@ -52,7 +47,7 @@ const CategoryPage = ({ params }: CategoryProductsProps) => {
       </Badge>
 
       {/* <ProductList offset={0} title={null} categoryId={params.id} /> */}
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {products?.length > 0 ? (
           <>
             {products.slice(0, 5).map((product) => (
@@ -67,29 +62,23 @@ const CategoryPage = ({ params }: CategoryProductsProps) => {
       </div>
 
       <div className="flex items-center w-full justify-between sm:justify-around">
-        <div>
-          <Button
-            variant={"secondary"}
-            disabled={offset === 0}
-            className={offset === 0 ? "hidden" : ""}
-            onClick={() => setOffset((prevOffset) => prevOffset - 5)}
-          >
-            <ArrowLeftIcon />
-            Anterior
-          </Button>
-        </div>
+        <Button
+          variant={"secondary"}
+          disabled={offset === 0}
+          onClick={() => setOffset((prevOffset) => prevOffset - 5)}
+        >
+          <ArrowLeftIcon />
+          Anterior
+        </Button>
 
-        <div>
-          <Button
-            variant={"secondary"}
-            disabled={products.length < 6}
-            className={products.length < 6 ? "hidden" : ""}
-            onClick={() => setOffset((prevOffset) => prevOffset + 5)}
-          >
-            Próxima
-            <ArrowRightIcon />
-          </Button>
-        </div>
+        <Button
+          variant={"secondary"}
+          disabled={products.length < 6}
+          onClick={() => setOffset((prevOffset) => prevOffset + 5)}
+        >
+          Próxima
+          <ArrowRightIcon />
+        </Button>
       </div>
     </div>
   );
