@@ -10,6 +10,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import ProductFormDialog from "./components/product-form-dialog";
 import ProductItem from "./components/product-item";
+import Search from "./components/search";
 
 const DashboardPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -41,6 +42,11 @@ const DashboardPage = () => {
           </DialogContent>
         </Dialog>
       </div>
+
+      <div className="px-2 my-4">
+        <Search offset={offset} setProducts={setProducts} />
+      </div>
+
       <div className="p-1 flex gap-2 flex-col my-2">
         {products.length > 0 ? (
           <>
