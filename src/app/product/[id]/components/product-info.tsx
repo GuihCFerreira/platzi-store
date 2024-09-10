@@ -1,9 +1,11 @@
 "use client";
 
 import { Product } from "@/_model/product";
+import { CartContext } from "@/_providers/cart";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon, ArrowRightIcon, TruckIcon } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { toast } from "sonner";
 
 interface ProductInfoProps {
   product: Product;
@@ -11,9 +13,11 @@ interface ProductInfoProps {
 
 const ProductInfo = ({ product }: ProductInfoProps) => {
   const [quantity, setQuantity] = useState(1);
+  const { addProductToCart } = useContext(CartContext);
 
   const addProductToCartClick = () => {
-    //addProductToCart({...product, quantity})
+    addProductToCart({ ...product, quantity });
+    toast.success("Produto adicionado ao carrinho!");
   };
 
   const handleDecreaseQuantityClick = () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { Product } from "@/_model/product";
-import { ReactNode, createContext, useMemo, useState } from "react";
+import { createContext, ReactNode, useMemo, useState } from "react";
 
 export interface CartProduct extends Product {
   quantity: number;
@@ -10,11 +10,7 @@ export interface CartProduct extends Product {
 interface ICartContext {
   products: CartProduct[];
   cartTotalPrice: number;
-  cartBasePrice: number;
-  cartTotalDiscount: number;
   total: number;
-  subtotal: number;
-  totalDiscount: number;
   addProductToCart: (product: CartProduct) => void;
   decreaseProductQuantity: (productId: number) => void;
   increaseProductQuantity: (productId: number) => void;
@@ -24,33 +20,21 @@ interface ICartContext {
 export const CartContext = createContext<ICartContext>({
   products: [],
   cartTotalPrice: 0,
-  cartBasePrice: 0,
-  cartTotalDiscount: 0,
   total: 0,
-  subtotal: 0,
-  totalDiscount: 0,
   addProductToCart: () => {},
-  decreaseProductQuantity: () => {},
-  increaseProductQuantity: () => {},
   removeProductFromCart: () => {},
+  increaseProductQuantity: () => {},
+  decreaseProductQuantity: () => {},
 });
 
 const CartProvider = ({ children }: { children: ReactNode }) => {
   const [products, setProducts] = useState<CartProduct[]>([]);
-
-  const subtotal = useMemo(() => {
-    return products.reduce((acc, product) => {
-      return acc + Number(product.price) * product.quantity;
-    }, 0);
-  }, [products]);
 
   const total = useMemo(() => {
     return products.reduce((acc, product) => {
       return acc + Number(product.price) * product.quantity;
     }, 0);
   }, [products]);
-
-  const totalDiscount = total - subtotal;
 
   const addProductToCart = (product: CartProduct) => {
     const productIsAlreadyOnCart = products.some(
@@ -74,23 +58,12 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    // se não, adicione o produto à lista
     setProducts((prev) => [...prev, product]);
   };
 
-  const decreaseProductQuantity = (productId: number) => {
+  const removeProductFromCart = (productId: number) => {
     setProducts((prev) =>
-      prev
-        .map((cartProduct) => {
-          if (cartProduct.id === productId) {
-            return {
-              ...cartProduct,
-              quantity: cartProduct.quantity - 1,
-            };
-          }
-          return cartProduct;
-        })
-        .filter((cartProduct) => cartProduct.quantity > 0)
+      prev.filter((cartProduct) => cartProduct.id !== productId)
     );
   };
 
@@ -104,15 +77,27 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
               quantity: cartProduct.quantity + 1,
             };
           }
+
           return cartProduct;
         })
         .filter((cartProduct) => cartProduct.quantity > 0)
     );
   };
 
-  const removeProductFromCart = (productId: number) => {
+  const decreaseProductQuantity = (productId: number) => {
     setProducts((prev) =>
-      prev.filter((cartProduct) => cartProduct.id !== productId)
+      prev
+        .map((cartProduct) => {
+          if (cartProduct.id === productId) {
+            return {
+              ...cartProduct,
+              quantity: cartProduct.quantity - 1,
+            };
+          }
+
+          return cartProduct;
+        })
+        .filter((cartProduct) => cartProduct.quantity > 0)
     );
   };
 
@@ -125,11 +110,7 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
         increaseProductQuantity,
         removeProductFromCart,
         total,
-        subtotal,
-        totalDiscount,
         cartTotalPrice: 0,
-        cartBasePrice: 0,
-        cartTotalDiscount: 0,
       }}
     >
       {children}

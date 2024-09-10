@@ -1,6 +1,10 @@
-import { CartProduct } from "@/_providers/cart";
+"use client";
+
+import { CartContext, CartProduct } from "@/_providers/cart";
 import { ArrowLeftIcon, ArrowRightIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
+import { useContext } from "react";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 
 interface CartItemProps {
@@ -10,29 +14,40 @@ interface CartItemProps {
 const CartItem = ({ product }: CartItemProps) => {
   //const {decreaseProductQuantity, increaseProductQuantity, removeProductFromCart} = useContext(CartContext)
 
+  const {
+    decreaseProductQuantity,
+    increaseProductQuantity,
+    removeProductFromCart,
+  } = useContext(CartContext);
+
   const handleDecreaseProductQuantityClick = () => {
-    //decreaseProductQuantity(product.id)
+    decreaseProductQuantity(product.id);
+    if (product.quantity <= 1)
+      return toast.error("O produto foi removido do carrinho!");
   };
 
   const handleIncreaseProductQuantityClick = () => {
-    //increaseProductQuantity(product.id)
+    increaseProductQuantity(product.id);
   };
 
   const handleRemoveProductFromCartClick = () => {
-    //removeProductFromCart(product.id)
+    removeProductFromCart(product.id);
+    toast.error("Produto removido do carrinho!");
   };
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-4">
-        <div className="bg-accent flex items-center justify-center rounded-lg h-[77px] w-[77px]">
+        <div className="relative bg-accent flex items-center justify-center rounded-lg h-[77px] w-[77px]">
           <Image
-            src={product.images[0]}
+            src={product.images[0]
+              .replace(/^\[|\]$/g, "") // Remove colchetes no início e no final
+              .replace(/"(https[^"]+)"/g, "$1")}
             alt={product.title}
             width={0}
             height={0}
             sizes="100vw"
-            className="h-auto w-auto max-h-[70%] max-w-[80%]"
+            className="object-cover h-[77px] w-[77px] rounded-lg"
           />
         </div>
 

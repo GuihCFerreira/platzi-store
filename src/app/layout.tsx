@@ -1,3 +1,4 @@
+import CartProvider from "@/_providers/cart";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import type { Metadata } from "next";
@@ -21,9 +22,11 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={inter.className}>
         <div className="flex h-full flex-col">
-          <Header />
-          <div className="flex-1">{children}</div>
-          <Footer />
+          <CartProvider>
+            <Header />
+            <div className="flex-1">{children}</div>
+            <Footer />
+          </CartProvider>
         </div>
         <Toaster />
       </body>
